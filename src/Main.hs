@@ -14,37 +14,35 @@ data Tweet = Tweet
 	} deriving (Show)
 
 -- This skips the first line containing the headers to not interfere with datatypes
-parseHeaders :: Parser ()
-parseHeaders = do
+headers :: Parser ()
+headers = do
 	anyChar `manyTill` lookAhead newline
 	return ()
 
 -- Parses a single quoted character, which is either a regular character or "" which is being
 -- replaced by a single such character
-parseQuotedChar :: Parser Char
-parseQuotedChar = do
+quotedChar :: Parser Char
+quotedChar = do
 	noneOf "\"" <|> try (string "\"\"" >> return '"')
 
 -- A quoted field starts with " and ends with " and every " in between is escaped by preceding it
 -- with "
-parseQuoted :: Parser String
-parseQuoted = do
-	between (char '"') (char '"') $ many parseQuotedChar
+quoted :: Parser String
+quoted = do
+	between (char '"') (char '"') $ many quotedChar
 
 -- Parses a single line of the CSV file
-parseCSVLine :: Parser Tweet
-parseCSVLine = do
-	fields <- parseQuoted `sepBy1` char ','
+tweet :: Parser Tweet
+tweet = do
+	fields <- quoted `sepBy1` char ','
 	return $ Tweet (fields!!0) (fields!!5)
 
 -- Parses a complete archive by skipping the headers
 parseArchive :: Parser [Tweet]
 parseArchive = do
 	-- ignore headers
-	parseHeaders
-	newline
-	parseCSVLine `sepEndBy` ((newline >> return ()) <|> eof)
-
+	headers >> newline
+	tweet `sepEndBy` ((newline >> return ()) <|> eof)
 
 -- Calculates the mean of a list of Ints
 mean :: [Int] -> Int
