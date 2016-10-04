@@ -19,6 +19,8 @@ parseHeaders = do
 	anyChar `manyTill` lookAhead newline
 	return ()
 
+-- Parses a single quoted character, which is either a regular character or "" which is being
+-- replaced by a single such character
 parseQuotedChar :: Parser Char
 parseQuotedChar = do
 	noneOf "\"" <|> try (string "\"\"" >> return '"')
