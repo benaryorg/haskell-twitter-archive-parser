@@ -28,7 +28,6 @@ parseCSVLine :: Parser Tweet
 parseCSVLine = do
 	fields <- parseQuoted `sepBy1` char ','
 	-- only return text for now
-	--return $ Tweet (fields!!5)
 	return $ Tweet (fields!!0) (fields!!5)
 
 parseArchive :: Parser [Tweet]
