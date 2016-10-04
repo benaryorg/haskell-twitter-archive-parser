@@ -28,7 +28,6 @@ parseCSVLine = do
 	fields <- parseQuoted `sepBy1` char ','
 	-- only return text for now
 	return $ Tweet $ fields!!5
-	--return $ Tweet $ unwords fields
 
 parseArchive :: Parser [Tweet]
 parseArchive = do
@@ -39,17 +38,6 @@ parseArchive = do
 
 mean :: [Int] -> Int
 mean list = (sum list) `div` (length list)
-
--- didn't know about maps then
-{-
-charCount :: String -> [(Char,Int)]
-charCount = foldl
-		(\list e -> case lookup e list of
-			Nothing -> (e,1):list
-			Just num -> (e,num+1):(filter (\(i,_) -> i /= e) list)
-		)
-		[]
--}
 
 charCount :: String -> [(Char,Int)]
 charCount = toAscList . foldl (\map e -> insertWith (+) e 1 map) empty
