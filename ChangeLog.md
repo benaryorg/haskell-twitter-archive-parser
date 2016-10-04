@@ -4,3 +4,9 @@
 
 * First version. Released on an unsuspecting world.
 
+## 0.2.0.0  -- 2016-10-04
+
+* General code cleanup
+* Switch to named fields
+* Comments
+
