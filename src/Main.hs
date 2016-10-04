@@ -50,7 +50,7 @@ stat tweets = do
 	putStr "number of characters: "
 	putStrLn $ show $ length $ concatMap text tweets
 	putStr "most used characters: "
-	putStrLn $ show $ take 5 $ map (\(e,_) -> e) $ sortBy (\(_,n1) (_,n2) -> n2 `compare` n1) $ charCount $ concatMap text tweets
+	putStrLn $ show $ take 5 $ map fst $ sortBy (\(_,n1) (_,n2) -> n2 `compare` n1) $ charCount $ concatMap text tweets
 
 main :: IO ()
 main = do
