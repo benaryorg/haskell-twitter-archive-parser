@@ -31,6 +31,8 @@ This whole thing is licensed under MIT so you're probably fine using it.
 
 # How do I actually use this?
 
+Best is you install [stack](https://docs.haskellstack.org/en/stable/README/).
+
 ```bash
 # if you are using stack
 stack setup
