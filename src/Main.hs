@@ -12,7 +12,8 @@ data Tweet = Tweet
 		tweet_id :: String,
 		in_reply_to_user_id :: String,
 		source :: String,
-		text :: String
+		text :: String,
+		retweeted_status_id :: String
 	} deriving (Show)
 
 -- This skips the first line containing the headers to not interfere with datatypes
@@ -37,7 +38,12 @@ quoted = do
 tweet :: Parser Tweet
 tweet = do
 	fields <- quoted `sepBy1` char ','
-	return $ Tweet (fields!!0) (fields!!2) (fields!!4) (fields!!5)
+	return $ Tweet
+		(fields!!0)
+		(fields!!2)
+		(fields!!4)
+		(fields!!5)
+		(fields!!6)
 
 -- Parses a complete archive by skipping the headers
 parseArchive :: Parser [Tweet]
