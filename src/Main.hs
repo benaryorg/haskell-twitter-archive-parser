@@ -50,9 +50,13 @@ parseArchive = do
 mean :: [Int] -> Int
 mean list = (sum list) `div` (length list)
 
+-- Uses a Map to determine how often each element occurs in the list, returns a Map
+occurrencesRaw :: Ord a => [a] -> Map a Int
+occurrencesRaw = foldl (\map e -> insertWith (+) e 1 map) empty
+
 -- Uses a Map to determine how often each element occurs in the list
 occurrences :: Ord a => [a] -> [(a,Int)]
-occurrences = toAscList . foldl (\map e -> insertWith (+) e 1 map) empty
+occurrences = toAscList . occurrencesRaw
 
 -- Used for sorting the occurrences descending (highest count first)
 compareOccurrencesDesc :: (a,Int) -> (a,Int) -> Ordering
