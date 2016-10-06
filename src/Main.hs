@@ -53,6 +53,10 @@ mean list = (sum list) `div` (length list)
 occurences :: Ord a => [a] -> [(a,Int)]
 occurences = toAscList . foldl (\map e -> insertWith (+) e 1 map) empty
 
+-- Returns the occuring elements sorted so that the highest ones are at the head
+mostOccurring :: Ord a => [a] -> [a]
+mostOccurring = (map fst) . (sortBy (\(_,n1) (_,n2) -> n2 `compare` n1)) . occurences
+
 -- Generates and prints stats
 stat :: [Tweet] -> IO ()
 stat tweets = do
