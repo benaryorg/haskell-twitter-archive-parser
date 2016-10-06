@@ -20,3 +20,7 @@
 
 * Multiple functions for occurrences
 
+## 0.3.1.1  -- 2016-10-06
+
+* Purrformance for character counting
+
