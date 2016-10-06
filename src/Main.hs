@@ -65,7 +65,7 @@ stat tweets = do
 	putStr "number of characters: "
 	putStrLn $ show $ length $ concatMap text tweets
 	putStr "most used characters: "
-	putStrLn $ show $ take 5 $ map fst $ sortBy (\(_,n1) (_,n2) -> n2 `compare` n1) $ occurences $ concatMap text tweets
+	putStrLn $ show $ take 5 $ mostOccurring $ concatMap text tweets
 
 -- Parses the archive and passes the resulting list of Tweets to the stat function
 main :: IO ()
