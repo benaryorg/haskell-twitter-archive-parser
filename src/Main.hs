@@ -72,7 +72,7 @@ stat tweets = do
 	putStr "mean character count: "
 	putStrLn $ show $ mean $ map (length . text) tweets
 	putStr "number of characters: "
-	putStrLn $ show $ length $ concatMap text tweets
+	putStrLn $ show $ foldl (\sum -> (+ sum) . length . text) 0 tweets
 	putStr "most used characters: "
 	putStrLn $ show $ take 5 $ mostOccurring $ concatMap text tweets
 	putStr "most used sources: "
