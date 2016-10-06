@@ -11,11 +11,14 @@ little.
 
 Currently prints (might be incomplete):
 
+- tweet count
+- number of retweets
 - mean character count
 - number of characters
 - most used characters
 - most used sources
 - most often replied to
+- most often mentioned
 
 # I want \<some stat\>!
 
