@@ -30,3 +30,7 @@
 * Purrformance for character occurrences
 	* `Map`s are now merged instead of `String`s
 
+## 0.3.3.0  -- 2016-10-06
+
+* regex-pcre dependency
+
