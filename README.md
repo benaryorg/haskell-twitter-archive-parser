@@ -54,6 +54,15 @@ number of characters: 7614380
 most used characters: " etni"
 ```
 
+## Getting Numbers
+
+In case you want numbers instead of just the top 5 or something similar, at the
+moment most output things use `mostOccurring`, just change that to
+`sortedOccurrences` and you should get some nice numbers.
+
+As mentioned below, the output format might change soon, this will include a
+format that gives you the numbers right away.
+
 # Version Information
 
 This is actually pretty easy, `v0.3.0.0` marks the beginning of easy
