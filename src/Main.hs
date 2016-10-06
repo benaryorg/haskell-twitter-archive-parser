@@ -54,13 +54,15 @@ mean list = (sum list) `div` (length list)
 occurrences :: Ord a => [a] -> [(a,Int)]
 occurrences = toAscList . foldl (\map e -> insertWith (+) e 1 map) empty
 
+-- Used for sorting the occurrences descending (highest count first)
 compareOccurrencesDesc :: (a,Int) -> (a,Int) -> Ordering
 compareOccurrencesDesc (_,x) (_,y) = compare y x
 
+-- Returns the occuring elements sorted so that the highest ones are at the head
 sortedOccurrences :: Ord a => [a] -> [(a,Int)]
 sortedOccurrences = (sortBy compareOccurrencesDesc) . occurrences
 
--- Returns the occuring elements sorted so that the highest ones are at the head
+-- Returns the occurrences sorted by descending count without the count
 mostOccurring :: Ord a => [a] -> [a]
 mostOccurring = (map fst) . sortedOccurrences
 
