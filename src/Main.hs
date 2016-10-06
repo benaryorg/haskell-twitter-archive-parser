@@ -48,9 +48,9 @@ parseArchive = do
 mean :: [Int] -> Int
 mean list = (sum list) `div` (length list)
 
--- Uses a Map to determine how often each character occurs
-charCount :: String -> [(Char,Int)]
-charCount = toAscList . foldl (\map e -> insertWith (+) e 1 map) empty
+-- Uses a Map to determine how often each element occurs in the list
+occurences :: Ord a => [a] -> [(a,Int)]
+occurences = toAscList . foldl (\map e -> insertWith (+) e 1 map) empty
 
 -- Generates and prints stats
 stat :: [Tweet] -> IO ()
@@ -60,7 +60,7 @@ stat tweets = do
 	putStr "number of characters: "
 	putStrLn $ show $ length $ concatMap text tweets
 	putStr "most used characters: "
-	putStrLn $ show $ take 5 $ map fst $ sortBy (\(_,n1) (_,n2) -> n2 `compare` n1) $ charCount $ concatMap text tweets
+	putStrLn $ show $ take 5 $ map fst $ sortBy (\(_,n1) (_,n2) -> n2 `compare` n1) $ occurences $ concatMap text tweets
 
 -- Parses the archive and passes the resulting list of Tweets to the stat function
 main :: IO ()
