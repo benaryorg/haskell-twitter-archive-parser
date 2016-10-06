@@ -17,11 +17,11 @@ Currently prints (might be incomplete):
 - most used sources
 - most often replied to
 
-# I want <some stat>!
+# I want \<some stat\>!
 
 Tell me! Open an issue!
 
-# I want to add <some stat> myself!
+# I want to add \<some stat\> myself!
 
 Just send a PR.
 This whole thing is licensed under MIT so you're probably fine using it.
