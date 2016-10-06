@@ -70,15 +70,15 @@ mostOccurring = (map fst) . sortedOccurrences
 stat :: [Tweet] -> IO ()
 stat tweets = do
 	putStr "mean character count: "
-	putStrLn $ show $ mean $ map (length . text) tweets
+	putStrLn $ show $ (mean . map (length . text)) tweets
 	putStr "number of characters: "
-	putStrLn $ show $ foldl (\sum -> (+ sum) . length . text) 0 tweets
+	putStrLn $ show $ (sum . map (length . text)) tweets
 	putStr "most used characters: "
-	putStrLn $ show $ take 5 $ mostOccurring $ concatMap text tweets
+	putStrLn $ show $ (take 5 . mostOccurring . concatMap text) tweets
 	putStr "most used sources: "
-	putStrLn $ show $ take 5 $ mostOccurring $ map source tweets
+	putStrLn $ show $ (take 5 . mostOccurring . map source) tweets
 	putStr "most often replied to: "
-	putStrLn $ show $ take 5 $ mostOccurring $ filter (/= "") $ map in_reply_to_user_id tweets
+	putStrLn $ show $ (take 5 . mostOccurring . filter (not . null) . map in_reply_to_user_id) tweets
 
 -- Parses the archive and passes the resulting list of Tweets to the stat function
 main :: IO ()
