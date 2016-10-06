@@ -24,3 +24,9 @@
 
 * Purrformance for character counting
 
+## 0.3.2.0  -- 2016-10-06
+
+* More usage of function composition
+* Purrformance for character occurrences
+	* `Map`s are now merged instead of `String`s
+
