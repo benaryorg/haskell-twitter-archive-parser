@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/benaryorg/haskell-twitter-archive-parser.svg?branch=master)](https://travis-ci.org/benaryorg/haskell-twitter-archive-parser)
+
 # What is this?
 
 This is a program that takes your [Twitter](https://twitter.com) archive's
