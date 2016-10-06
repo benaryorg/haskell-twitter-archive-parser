@@ -2,7 +2,7 @@ module Main where
 
 import Text.ParserCombinators.Parsec
 import Data.List
-import Data.Map (insertWith,empty,toAscList)
+import Data.Map (insertWith,unionWith,empty,toAscList,Map)
 
 -- A tweet consists of the following fields:
 --  tweet_id, in_reply_to_status_id, in_reply_to_user_id, timestamp, source, text,
@@ -78,7 +78,7 @@ stat tweets = do
 	putStr "number of characters: "
 	putStrLn $ show $ (sum . map (length . text)) tweets
 	putStr "most used characters: "
-	putStrLn $ show $ (take 5 . mostOccurring . concatMap text) tweets
+	putStrLn $ show $ (take 5 . map fst . sortBy compareOccurrencesDesc . toAscList . (foldl (unionWith (+)) empty) . map (occurrencesRaw . text)) tweets
 	putStr "most used sources: "
 	putStrLn $ show $ (take 5 . mostOccurring . map source) tweets
 	putStr "most often replied to: "
