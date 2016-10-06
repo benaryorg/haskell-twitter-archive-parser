@@ -9,6 +9,14 @@ Well, there are missing comments but this is just temporary.
 It's also probably not best practice, that's why I'm going to rewrite it a
 little.
 
+Currently prints (might be incomplete):
+
+- mean character count
+- number of characters
+- most used characters
+- most used sources
+- most often replied to
+
 # I want <some stat>!
 
 Tell me! Open an issue!
