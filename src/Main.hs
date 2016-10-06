@@ -53,6 +53,13 @@ parseArchive = do
 	headers >> newline
 	tweet `sepEndBy` ((newline >> return ()) <|> eof)
 
+-- Returns a list of "@username"s that were mentioned in the tweet
+mentions :: Tweet -> [String]
+mentions = concat . ((flip foo) pattern) . text
+	where
+		pattern = "\\B@[_a-zA-Z0-9]+\\b"
+		foo = (=~) :: (String -> String -> [[String]])
+
 -- Calculates the mean of a list of Ints
 mean :: [Int] -> Int
 mean list = (sum list) `div` (length list)
@@ -90,6 +97,8 @@ stat tweets = do
 	putStrLn $ show $ (take 5 . mostOccurring . map source) tweets
 	putStr "most often replied to: "
 	putStrLn $ show $ (take 5 . mostOccurring . filter (not . null) . map in_reply_to_user_id) tweets
+	putStr "most often mentioned: "
+	putStrLn $ show $ (take 5 . mostOccurring . concat . filter (not . null) . map mentions . filter (null . retweeted_status_id)) tweets
 
 -- Parses the archive and passes the resulting list of Tweets to the stat function
 main :: IO ()
