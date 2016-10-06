@@ -3,6 +3,7 @@ module Main where
 import Text.ParserCombinators.Parsec
 import Data.List
 import Data.Map (insertWith,unionWith,empty,toAscList,Map)
+import Text.Regex.PCRE ((=~))
 
 -- A tweet consists of the following fields:
 --  tweet_id, in_reply_to_status_id, in_reply_to_user_id, timestamp, source, text,

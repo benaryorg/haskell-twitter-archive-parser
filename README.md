@@ -37,8 +37,8 @@ stack exec twitter-archive-parser < ../tweets.csv
 # if you use cabal (assuming you have appropriate dependencies)
 cabal run < ../tweets.csv
 
-# if you happen to have ghc (8.0), parsec and containers installed you probably
-# know how to compile and run this yourself
+# if you happen to have ghc (8.0), parsec, regex-pcre and containers installed
+# you probably know how to compile and run this yourself
 ```
 
 ## Example Output

@@ -60,7 +60,7 @@ executable twitter-archive-parser
   -- other-extensions:    
   
   -- Other library packages from which modules are imported.
-  build-depends:       base >=4.9 && <4.10, parsec >=3.1 && <3.2, containers >=0.5 && <0.6
+  build-depends:       base >=4.9 && <4.10, parsec >=3.1 && <3.2, containers >=0.5 && <0.6, regex-pcre >=0.94 && <0.95
   
   -- Directories containing source files.
   hs-source-dirs:      src
