@@ -1,7 +1,7 @@
 # What is this?
 
-This is a program that takes your [Twitter](twitter.com) archive's `tweets.csv`
-on stdin and then prints some stats about it.
+This is a program that takes your [Twitter](https://twitter.com) archive's
+`tweets.csv` on stdin and then prints some stats about it.
 
 It doesn't have much functionality and could use a little lazy parsing but is
 fine otherwise.
