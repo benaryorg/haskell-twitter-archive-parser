@@ -87,6 +87,8 @@ mostOccurring = (map fst) . sortedOccurrences
 -- Generates and prints stats
 stat :: [Tweet] -> IO ()
 stat tweets = do
+	putStr "tweet count: "
+	putStrLn $ show $ length tweets
 	putStr "mean character count: "
 	putStrLn $ show $ (mean . map (length . text)) tweets
 	putStr "number of characters: "
