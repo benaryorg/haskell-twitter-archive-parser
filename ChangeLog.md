@@ -10,3 +10,9 @@
 * Switch to named fields
 * Comments
 
+## 0.3.0.0  -- 2016-10-06
+
+* Clean code by using more general and common functions
+* Easy extensibility
+* Planning on being stable
+
