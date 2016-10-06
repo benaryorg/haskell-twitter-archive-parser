@@ -89,6 +89,8 @@ stat :: [Tweet] -> IO ()
 stat tweets = do
 	putStr "tweet count: "
 	putStrLn $ show $ length tweets
+	putStr "number of retweets: "
+	putStrLn $ show $ (length . filter (not . null . retweeted_status_id)) tweets
 	putStr "mean character count: "
 	putStrLn $ show $ (mean . map (length . text)) tweets
 	putStr "number of characters: "
