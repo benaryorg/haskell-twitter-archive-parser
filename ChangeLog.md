@@ -16,3 +16,7 @@
 * Easy extensibility
 * Planning on being stable
 
+## 0.3.1.0  -- 2016-10-06
+
+* Multiple functions for occurrences
+
