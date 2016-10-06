@@ -51,12 +51,18 @@ mean :: [Int] -> Int
 mean list = (sum list) `div` (length list)
 
 -- Uses a Map to determine how often each element occurs in the list
-occurences :: Ord a => [a] -> [(a,Int)]
-occurences = toAscList . foldl (\map e -> insertWith (+) e 1 map) empty
+occurrences :: Ord a => [a] -> [(a,Int)]
+occurrences = toAscList . foldl (\map e -> insertWith (+) e 1 map) empty
+
+compareOccurrencesDesc :: (a,Int) -> (a,Int) -> Ordering
+compareOccurrencesDesc (_,x) (_,y) = compare y x
+
+sortedOccurrences :: Ord a => [a] -> [(a,Int)]
+sortedOccurrences = (sortBy compareOccurrencesDesc) . occurrences
 
 -- Returns the occuring elements sorted so that the highest ones are at the head
 mostOccurring :: Ord a => [a] -> [a]
-mostOccurring = (map fst) . (sortBy (\(_,n1) (_,n2) -> n2 `compare` n1)) . occurences
+mostOccurring = (map fst) . sortedOccurrences
 
 -- Generates and prints stats
 stat :: [Tweet] -> IO ()
