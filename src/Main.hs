@@ -10,6 +10,7 @@ import Data.Map (insertWith,empty,toAscList)
 data Tweet = Tweet
 	{
 		tweet_id :: String,
+		source :: String,
 		text :: String
 	} deriving (Show)
 
@@ -35,7 +36,7 @@ quoted = do
 tweet :: Parser Tweet
 tweet = do
 	fields <- quoted `sepBy1` char ','
-	return $ Tweet (fields!!0) (fields!!5)
+	return $ Tweet (fields!!0) (fields!!4) (fields!!5)
 
 -- Parses a complete archive by skipping the headers
 parseArchive :: Parser [Tweet]
