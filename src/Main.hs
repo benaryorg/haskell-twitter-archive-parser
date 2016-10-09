@@ -122,7 +122,7 @@ statMostRepliedTo = take 5 . mostOccurring . filter (not . null) . map in_reply_
 statMostMentioned :: [Tweet] -> [String]
 statMostMentioned = take 5 . mostOccurring . concat . filter (not . null) . map mentions . filter (not . retweet)
 
--- Which stats are being created ((description,function))
+-- A list of stats listed with their description and the function of the algorithm
 algorithms :: [(String,([Tweet] -> Result String))]
 algorithms =
 	[
