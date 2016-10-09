@@ -34,3 +34,8 @@
 
 * regex-pcre dependency
 
+## 0.3.4.0  -- 2016-10-07
+
+* Code cleanup with retweet function
+* Fix some stats by not including retweets
+
