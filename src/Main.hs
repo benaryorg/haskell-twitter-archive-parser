@@ -17,6 +17,10 @@ data Tweet = Tweet
 		retweeted_status_id :: String
 	} deriving (Show)
 
+-- The result of an algorithm
+data (Show a) => Result a = Value a
+	| List [a]
+
 -- This skips the first line containing the headers to not interfere with datatypes
 headers :: Parser ()
 headers = do
@@ -88,29 +92,64 @@ sortedOccurrences = (sortBy compareOccurrencesDesc) . occurrences
 mostOccurring :: Ord a => [a] -> [a]
 mostOccurring = (map fst) . sortedOccurrences
 
+statNumberTweets :: [Tweet] -> Int
+statNumberTweets = length
+
+statNumberRetweets :: [Tweet] -> Int
+statNumberRetweets = length . filter retweet
+
+statNumberPlainTweets :: [Tweet] -> Int
+statNumberPlainTweets = length . filter (null . mentions) . filter (not . retweet)
+
+statMeanNumberMentions :: [Tweet] -> Int
+statMeanNumberMentions = mean . map (length . mentions) . filter (not . retweet)
+
+statMeanNumberCharacters :: [Tweet] -> Int
+statMeanNumberCharacters = mean . map (length . text) . filter (not . retweet)
+
+statNumberCharacters :: [Tweet] -> Int
+statNumberCharacters = sum . map (length . text) . filter (not . retweet)
+
+statMostUsedSources :: [Tweet] -> [String]
+statMostUsedSources = take 5 . mostOccurring . map source
+
+statMostUsedCharacters :: [Tweet] -> [Char]
+statMostUsedCharacters = take 5 . map fst . sortBy compareOccurrencesDesc . toAscList . (foldl (unionWith (+)) empty) . map (occurrencesRaw . text) . filter (not . retweet)
+
+statMostRepliedTo :: [Tweet] -> [String]
+statMostRepliedTo = take 5 . mostOccurring . filter (not . null) . map in_reply_to_user_id . filter (not . retweet)
+
+statMostMentioned :: [Tweet] -> [String]
+statMostMentioned = take 5 . mostOccurring . concat . filter (not . null) . map mentions . filter (not . retweet)
+
+-- Which stats are being created ((description,function))
+algorithms :: [(String,([Tweet] -> Result String))]
+algorithms =
+	[
+		("tweet count",Value . show . statNumberTweets),
+		("number of retweets",Value . show . statNumberRetweets),
+		("number of plain tweets (no mentions or retweets)",Value . show . statNumberPlainTweets),
+		("mean number of accounts mentioned",Value . show . statMeanNumberMentions),
+		("mean character count",Value . show . statMeanNumberCharacters),
+		("number of characters",Value . show . statNumberCharacters),
+		("most used sources",List . statMostUsedSources),
+		("most used characters",List . map show . statMostUsedCharacters),
+		("most often replied to",List . statMostRepliedTo),
+		("most often mentioned",List . statMostMentioned)
+	]
+
 -- Generates and prints stats
-stat :: [Tweet] -> IO ()
-stat tweets = do
-	putStr "tweet count: "
-	putStrLn $ show $ length tweets
-	putStr "number of retweets: "
-	putStrLn $ show $ (length . filter retweet) tweets
-	putStr "number of plain tweets (no mentions or retweets): "
-	putStrLn $ show $ (length . filter (null . mentions) . filter (not . retweet)) tweets
-	putStr "mean number of accounts mentioned: "
-	putStrLn $ show $ (mean . map (length . mentions) . filter (not . retweet)) tweets
-	putStr "mean character count: "
-	putStrLn $ show $ (mean . map (length . text) . filter (not . retweet)) tweets
-	putStr "number of characters: "
-	putStrLn $ show $ (sum . map (length . text) . filter (not . retweet)) tweets
-	putStr "most used characters: "
-	putStrLn $ show $ (take 5 . map fst . sortBy compareOccurrencesDesc . toAscList . (foldl (unionWith (+)) empty) . map (occurrencesRaw . text) . filter (not . retweet)) tweets
-	putStr "most used sources: "
-	putStrLn $ show $ (take 5 . mostOccurring . map source) tweets
-	putStr "most often replied to: "
-	putStrLn $ show $ (take 5 . mostOccurring . filter (not . null) . map in_reply_to_user_id . filter (not . retweet)) tweets
-	putStr "most often mentioned: "
-	putStrLn $ show $ (take 5 . mostOccurring . concat . filter (not . null) . map mentions . filter (not . retweet)) tweets
+statistics :: [Tweet] -> [(String,Result String)]
+statistics tweets = map (\(desc,foo) -> (desc,foo tweets)) algorithms
+
+-- Prints a single stat taking care of Values and Lists
+printSingleStat :: (String,Result String) -> IO ()
+printSingleStat (desc,Value value) = putStrLn (desc++": "++value) >> putStrLn ""
+printSingleStat (desc,List list) = putStrLn (desc++":") >> mapM_ (putStrLn . ("- "++)) list >> putStrLn ""
+
+-- Prints all statistics
+printStats :: [(String,Result String)] -> IO ()
+printStats = mapM_ printSingleStat
 
 -- Parses the archive and passes the resulting list of Tweets to the stat function
 main :: IO ()
@@ -118,5 +157,5 @@ main = do
 	text <- getContents
 	case parse parseArchive "twitter archive" text of
 		Left err -> putStrLn $ show err
-		Right dat -> stat dat
+		Right dat -> printStats $ statistics dat
 
