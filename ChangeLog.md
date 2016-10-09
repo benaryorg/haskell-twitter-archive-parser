@@ -1,12 +1,12 @@
 # Revision history for twitter-archive-parser
 
-## 0.3.5.0  -- 2016-10-07
+## 0.3.5.0  -- 2016-10-09
 
 * New output format
 	* extensible
 	* configurable
 
-## 0.3.4.0  -- 2016-10-07
+## 0.3.4.0  -- 2016-10-09
 
 * Code cleanup with retweet function
 * Fix some stats by not including retweets
