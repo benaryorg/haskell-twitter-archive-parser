@@ -15,10 +15,12 @@ Currently prints (might be incomplete):
 
 - tweet count
 - number of retweets
+- number of plain tweets (no mentions or retweets)
+- mean number of accounts mentioned
 - mean character count
 - number of characters
-- most used characters
 - most used sources
+- most used characters
 - most often replied to
 - most often mentioned
 
@@ -50,10 +52,36 @@ cabal run < ../tweets.csv
 
 ## Example Output
 
+I stripped the list output to only two per stat.
+
 ```text
-mean character count: 67
-number of characters: 7614380
-most used characters: " etni"
+tweet count: 112594
+
+number of retweets: 50606
+
+number of plain tweets (no mentions or retweets): 21948
+
+mean number of accounts mentioned: 0
+
+mean character count: 54
+
+number of characters: 3408388
+
+most used sources:
+- <a href="https://github.com/veskuh/Tweetian" rel="nofollow">Tweetian for Sailfish OS</a>
+- <a href="http://hotot.org" rel="nofollow">Hotot</a>
+
+most used characters:
+- ' '
+- 'e'
+
+most often replied to:
+- 170420365
+- 1201898934
+
+most often mentioned:
+- @_xxyy
+- @Nordwind25
 ```
 
 ## Getting Numbers
@@ -65,13 +93,17 @@ moment most output things use `mostOccurring`, just change that to
 As mentioned below, the output format might change soon, this will include a
 format that gives you the numbers right away.
 
+# Output Format
+
+The output format is easily extensible and is currently focused on readability
+but could be rewritten to be e.g. JSON.
+This is currently planned for a later release which might also introduce
+command line arguments for tweaking the output.
+
 # Version Information
 
 This is actually pretty easy, `v0.3.0.0` marks the beginning of easy
 extensibility by having the `mostOccurring` function resulting in clean code.
 From then on there will be a lot of `v0.3.x.0` releases for additional
 information and `v0.3.0.x` releases for cleanups.
-
-Maybe another major release for a better output format, but that can wait for
-now.
 
