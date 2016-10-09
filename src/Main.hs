@@ -1,8 +1,8 @@
 module Main where
 
-import Text.ParserCombinators.Parsec
 import Data.List
 import Data.Map (insertWith,unionWith,empty,toAscList,Map)
+import Text.ParserCombinators.Parsec
 import Text.Regex.PCRE ((=~))
 
 -- A tweet consists of the following fields:
