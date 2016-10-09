@@ -6,9 +6,7 @@ import Data.String.Utils
 import Text.ParserCombinators.Parsec
 import Text.Regex.PCRE ((=~))
 
--- A tweet consists of the following fields:
---  tweet_id, in_reply_to_status_id, in_reply_to_user_id, timestamp, source, text,
---  retweeted_status_id, retweeted_status_user_id, retweeted_status_timestamp, expanded_urls
+-- A tweet with all fields stored in the archive's CVS file
 data Tweet = Tweet
 	{
 		tweet_id :: String,
