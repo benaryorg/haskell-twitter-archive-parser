@@ -60,6 +60,10 @@ mentions = concat . ((flip foo) pattern) . text
 		pattern = "\\B@[_a-zA-Z0-9]+\\b"
 		foo = (=~) :: (String -> String -> [[String]])
 
+-- Determines if the tweet is a retweet
+retweet :: Tweet -> Bool
+retweet = not . null . retweeted_status_id
+
 -- Calculates the mean of a list of Ints
 mean :: [Int] -> Int
 mean list = (sum list) `div` (length list)
