@@ -97,6 +97,8 @@ stat tweets = do
 	putStrLn $ show $ (length . filter retweet) tweets
 	putStr "number of plain tweets (no mentions or retweets): "
 	putStrLn $ show $ (length . filter (null . mentions) . filter (not . retweet)) tweets
+	putStr "mean number of accounts mentioned: "
+	putStrLn $ show $ (mean . map (length . mentions) . filter (not . retweet)) tweets
 	putStr "mean character count: "
 	putStrLn $ show $ (mean . map (length . text) . filter (not . retweet)) tweets
 	putStr "number of characters: "
