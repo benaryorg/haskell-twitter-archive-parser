@@ -81,6 +81,10 @@ retweet = not . null . retweeted_status_id
 mean :: Integral a => [a] -> a
 mean list = (sum list) `div` fromIntegral (length list)
 
+-- Calculates the mean of a list of Fractionals
+fmean :: Fractional a => [a] -> a
+fmean list = (sum list) / fromIntegral (length list)
+
 -- Uses a Map to determine how often each element occurs in the list, returns a Map
 occurrencesRaw :: Ord a => [a] -> Map a Int
 occurrencesRaw = foldl (\map e -> insertWith (+) e 1 map) empty
