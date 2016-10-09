@@ -2,6 +2,7 @@ module Main where
 
 import Data.List
 import Data.Map (insertWith,unionWith,empty,toAscList,Map)
+import Data.String.Utils
 import Text.ParserCombinators.Parsec
 import Text.Regex.PCRE ((=~))
 
@@ -11,10 +12,15 @@ import Text.Regex.PCRE ((=~))
 data Tweet = Tweet
 	{
 		tweet_id :: String,
+		in_reply_to_status_id :: String,
 		in_reply_to_user_id :: String,
+		timestamp :: String,
 		source :: String,
 		text :: String,
-		retweeted_status_id :: String
+		retweeted_status_id :: String,
+		retweeted_status_user_id :: String,
+		retweeted_status_timestamp :: String,
+		expanded_urls :: [String]
 	} deriving (Show)
 
 -- The result of an algorithm
@@ -45,10 +51,15 @@ tweet = do
 	fields <- quoted `sepBy1` char ','
 	return $ Tweet
 		(fields!!0)
+		(fields!!1)
 		(fields!!2)
+		(fields!!3)
 		(fields!!4)
 		(fields!!5)
 		(fields!!6)
+		(fields!!7)
+		(fields!!8)
+		(split "," $ fields!!9)
 
 -- Parses a complete archive by skipping the headers
 parseArchive :: Parser [Tweet]
