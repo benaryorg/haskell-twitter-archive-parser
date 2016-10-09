@@ -39,3 +39,9 @@
 * Code cleanup with retweet function
 * Fix some stats by not including retweets
 
+## 0.3.5.0  -- 2016-10-07
+
+* New output format
+	* extensible
+	* configurable
+
