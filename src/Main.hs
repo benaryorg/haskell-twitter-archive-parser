@@ -77,9 +77,9 @@ mentions = concat . ((flip foo) pattern) . text
 retweet :: Tweet -> Bool
 retweet = not . null . retweeted_status_id
 
--- Calculates the mean of a list of Ints
-mean :: [Int] -> Int
-mean list = (sum list) `div` (length list)
+-- Calculates the mean of a list of Integrals
+mean :: Integral a => [a] -> a
+mean list = (sum list) `div` fromIntegral (length list)
 
 -- Uses a Map to determine how often each element occurs in the list, returns a Map
 occurrencesRaw :: Ord a => [a] -> Map a Int
