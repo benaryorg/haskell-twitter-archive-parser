@@ -1,5 +1,10 @@
 # Revision history for twitter-archive-parser
 
+## 0.3.6.0  -- 2016-10-10
+
+* MissingH dependency
+* All `Tweet` fields
+
 ## 0.3.5.0  -- 2016-10-09
 
 * New output format
