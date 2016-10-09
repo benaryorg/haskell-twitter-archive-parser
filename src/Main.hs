@@ -94,21 +94,21 @@ stat tweets = do
 	putStr "tweet count: "
 	putStrLn $ show $ length tweets
 	putStr "number of retweets: "
-	putStrLn $ show $ (length . filter (not . null . retweeted_status_id)) tweets
+	putStrLn $ show $ (length . filter retweet) tweets
 	putStr "number of plain tweets (no mentions or retweets): "
-	putStrLn $ show $ (length . filter (null . retweeted_status_id) . filter (null . mentions)) tweets
+	putStrLn $ show $ (length . filter (null . mentions) . filter (not . retweet)) tweets
 	putStr "mean character count: "
-	putStrLn $ show $ (mean . map (length . text)) tweets
+	putStrLn $ show $ (mean . map (length . text) . filter (not . retweet)) tweets
 	putStr "number of characters: "
-	putStrLn $ show $ (sum . map (length . text)) tweets
+	putStrLn $ show $ (sum . map (length . text) . filter (not . retweet)) tweets
 	putStr "most used characters: "
-	putStrLn $ show $ (take 5 . map fst . sortBy compareOccurrencesDesc . toAscList . (foldl (unionWith (+)) empty) . map (occurrencesRaw . text)) tweets
+	putStrLn $ show $ (take 5 . map fst . sortBy compareOccurrencesDesc . toAscList . (foldl (unionWith (+)) empty) . map (occurrencesRaw . text) . filter (not . retweet)) tweets
 	putStr "most used sources: "
 	putStrLn $ show $ (take 5 . mostOccurring . map source) tweets
 	putStr "most often replied to: "
-	putStrLn $ show $ (take 5 . mostOccurring . filter (not . null) . map in_reply_to_user_id) tweets
+	putStrLn $ show $ (take 5 . mostOccurring . filter (not . null) . map in_reply_to_user_id . filter (not . retweet)) tweets
 	putStr "most often mentioned: "
-	putStrLn $ show $ (take 5 . mostOccurring . concat . filter (not . null) . map mentions . filter (null . retweeted_status_id)) tweets
+	putStrLn $ show $ (take 5 . mostOccurring . concat . filter (not . null) . map mentions . filter (not . retweet)) tweets
 
 -- Parses the archive and passes the resulting list of Tweets to the stat function
 main :: IO ()
