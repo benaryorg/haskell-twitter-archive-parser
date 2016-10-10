@@ -127,6 +127,9 @@ statMeanNumberMentions = fmean . map (fromIntegral . length . mentions) . filter
 statMeanNumberCharacters :: [Tweet] -> Int
 statMeanNumberCharacters = mean . map (length . text) . filter (not . retweet)
 
+statMeanNumberLinks :: [Tweet] -> Double
+statMeanNumberLinks = fmean . map (fromIntegral . length . expanded_urls) . filter (not . retweet)
+
 statMostUsedSources :: [Tweet] -> [String]
 statMostUsedSources = take 5 . mostOccurring . map source
 
@@ -150,6 +153,7 @@ algorithms =
 		("number of links",Value . show . statNumberLinks),
 		("mean number of accounts mentioned",Value . printf "%.3f" . statMeanNumberMentions),
 		("mean character count",Value . show . statMeanNumberCharacters),
+		("mean number of links",Value . printf "%.3f" . statMeanNumberLinks),
 		("most used sources",List . statMostUsedSources),
 		("most used characters",List . map show . statMostUsedCharacters),
 		("most often replied to",List . statMostRepliedTo),
