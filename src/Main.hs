@@ -115,14 +115,14 @@ statNumberRetweets = length . filter retweet
 statNumberPlainTweets :: [Tweet] -> Int
 statNumberPlainTweets = length . filter (null . mentions) . filter (not . retweet)
 
+statNumberCharacters :: [Tweet] -> Int
+statNumberCharacters = sum . map (length . text) . filter (not . retweet)
+
 statMeanNumberMentions :: [Tweet] -> Double
 statMeanNumberMentions = fmean . map (fromIntegral . length . mentions) . filter (not . retweet)
 
 statMeanNumberCharacters :: [Tweet] -> Int
 statMeanNumberCharacters = mean . map (length . text) . filter (not . retweet)
-
-statNumberCharacters :: [Tweet] -> Int
-statNumberCharacters = sum . map (length . text) . filter (not . retweet)
 
 statMostUsedSources :: [Tweet] -> [String]
 statMostUsedSources = take 5 . mostOccurring . map source
@@ -143,9 +143,9 @@ algorithms =
 		("tweet count",Value . show . statNumberTweets),
 		("number of retweets",Value . show . statNumberRetweets),
 		("number of plain tweets (no mentions or retweets)",Value . show . statNumberPlainTweets),
+		("number of characters",Value . show . statNumberCharacters),
 		("mean number of accounts mentioned",Value . printf "%.3f" . statMeanNumberMentions),
 		("mean character count",Value . show . statMeanNumberCharacters),
-		("number of characters",Value . show . statNumberCharacters),
 		("most used sources",List . statMostUsedSources),
 		("most used characters",List . map show . statMostUsedCharacters),
 		("most often replied to",List . statMostRepliedTo),
