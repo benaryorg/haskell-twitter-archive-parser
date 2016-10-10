@@ -1,5 +1,10 @@
 # Revision history for twitter-archive-parser
 
+## 0.3.7.0  -- 2016-10-10
+
+* Broader `mean`
+* `fmean`
+
 ## 0.3.6.0  -- 2016-10-10
 
 * MissingH dependency
