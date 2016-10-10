@@ -4,6 +4,7 @@ import Data.List
 import Data.Map (insertWith,unionWith,empty,toAscList,Map)
 import Data.String.Utils
 import Text.ParserCombinators.Parsec
+import Text.Printf
 import Text.Regex.PCRE ((=~))
 
 -- A tweet with all fields stored in the archive's CVS file
@@ -114,8 +115,8 @@ statNumberRetweets = length . filter retweet
 statNumberPlainTweets :: [Tweet] -> Int
 statNumberPlainTweets = length . filter (null . mentions) . filter (not . retweet)
 
-statMeanNumberMentions :: [Tweet] -> Int
-statMeanNumberMentions = mean . map (length . mentions) . filter (not . retweet)
+statMeanNumberMentions :: [Tweet] -> Double
+statMeanNumberMentions = fmean . map (fromIntegral . length . mentions) . filter (not . retweet)
 
 statMeanNumberCharacters :: [Tweet] -> Int
 statMeanNumberCharacters = mean . map (length . text) . filter (not . retweet)
@@ -142,7 +143,7 @@ algorithms =
 		("tweet count",Value . show . statNumberTweets),
 		("number of retweets",Value . show . statNumberRetweets),
 		("number of plain tweets (no mentions or retweets)",Value . show . statNumberPlainTweets),
-		("mean number of accounts mentioned",Value . show . statMeanNumberMentions),
+		("mean number of accounts mentioned",Value . printf "%.3f" . statMeanNumberMentions),
 		("mean character count",Value . show . statMeanNumberCharacters),
 		("number of characters",Value . show . statNumberCharacters),
 		("most used sources",List . statMostUsedSources),
