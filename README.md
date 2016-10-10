@@ -17,8 +17,10 @@ Currently prints (might be incomplete):
 - number of retweets
 - number of plain tweets (no mentions or retweets)
 - number of characters
+- number of links
 - mean number of accounts mentioned
 - mean character count
+- mean number of links
 - most used sources
 - most used characters
 - most often replied to
