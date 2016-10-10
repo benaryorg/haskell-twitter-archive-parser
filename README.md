@@ -16,9 +16,9 @@ Currently prints (might be incomplete):
 - tweet count
 - number of retweets
 - number of plain tweets (no mentions or retweets)
+- number of characters
 - mean number of accounts mentioned
 - mean character count
-- number of characters
 - most used sources
 - most used characters
 - most often replied to
