@@ -104,8 +104,11 @@ command line arguments for tweaking the output.
 
 # Version Information
 
-This is actually pretty easy, `v0.3.0.0` marks the beginning of easy
-extensibility by having the `mostOccurring` function resulting in clean code.
-From then on there will be a lot of `v0.3.x.0` releases for additional
-information and `v0.3.0.x` releases for cleanups.
+Currently the *ChangeLog* and versioning are based on the functions that are
+not directly stats but make up the API that is used by the statistics.
+This will change with the *1.0.0.0* release which will also introduce command
+line arguments.
+From then on the versioning will be about the statistics and not about the
+internal API, mainly because the API will remain frozen then, except for major
+releases.
 
