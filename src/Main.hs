@@ -6,8 +6,6 @@ import TwitterMonad
 
 import Data.List
 import Data.Map (insertWith,unionWith,empty,toAscList,Map)
-import Data.String.Utils
-import Text.ParserCombinators.Parsec
 import Text.Printf
 import Text.Regex.PCRE ((=~))
 
