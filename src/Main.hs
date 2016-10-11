@@ -1,5 +1,9 @@
 module Main where
 
+import Input
+import Tweet
+import TwitterMonad
+
 import Data.List
 import Data.Map (insertWith,unionWith,empty,toAscList,Map)
 import Data.String.Utils
@@ -7,65 +11,9 @@ import Text.ParserCombinators.Parsec
 import Text.Printf
 import Text.Regex.PCRE ((=~))
 
--- A tweet with all fields stored in the archive's CVS file
-data Tweet = Tweet
-	{
-		tweet_id :: String,
-		in_reply_to_status_id :: String,
-		in_reply_to_user_id :: String,
-		timestamp :: String,
-		source :: String,
-		text :: String,
-		retweeted_status_id :: String,
-		retweeted_status_user_id :: String,
-		retweeted_status_timestamp :: String,
-		expanded_urls :: [String]
-	} deriving (Show)
-
 -- The result of an algorithm
 data (Show a) => Result a = Value a
 	| List [a]
-
--- This skips the first line containing the headers to not interfere with datatypes
-headers :: Parser ()
-headers = do
-	anyChar `manyTill` lookAhead newline
-	return ()
-
--- Parses a single quoted character, which is either a regular character or "" which is being
--- replaced by a single such character
-quotedChar :: Parser Char
-quotedChar = do
-	noneOf "\"" <|> try (string "\"\"" >> return '"')
-
--- A quoted field starts with " and ends with " and every " in between is escaped by preceding it
--- with "
-quoted :: Parser String
-quoted = do
-	between (char '"') (char '"') $ many quotedChar
-
--- Parses a single line of the CSV file
-tweet :: Parser Tweet
-tweet = do
-	fields <- quoted `sepBy1` char ','
-	return $ Tweet
-		(fields!!0)
-		(fields!!1)
-		(fields!!2)
-		(fields!!3)
-		(fields!!4)
-		(fields!!5)
-		(fields!!6)
-		(fields!!7)
-		(fields!!8)
-		(split "," $ fields!!9)
-
--- Parses a complete archive by skipping the headers
-parseArchive :: Parser [Tweet]
-parseArchive = do
-	-- ignore headers
-	headers >> newline
-	tweet `sepEndBy` ((newline >> return ()) <|> eof)
 
 -- Returns a list of "@username"s that were mentioned in the tweet
 mentions :: Tweet -> [String]
@@ -177,7 +125,8 @@ printStats = mapM_ printSingleStat
 main :: IO ()
 main = do
 	text <- getContents
-	case parse parseArchive "twitter archive" text of
-		Left err -> putStrLn $ show err
+	case readArchive text of
 		Right dat -> printStats $ statistics dat
+		Left err -> case err of
+			InputError err -> putStrLn $ "InputError: "++show err
 
