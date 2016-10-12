@@ -117,10 +117,13 @@ statistics statlist tweets = map (\(name,desc,foo) -> (name,desc,foo tweets)) (f
 printSingleStat :: String -> (String,String,Result String) -> String
 printSingleStat "plain" (name,desc,Value value) = desc++": "++value
 printSingleStat "plain" (name,desc,List list) = desc++":"++concatMap ("\n- "++) list
+printSingleStat "json" (name,desc,Value value) = printf "\"%s\":%s" name (show value)
+printSingleStat "json" (name,desc,List list) = printf "\"%s\":[%s]" name $ join "," $ map show list
 
 -- Prints all statistics
 printStats :: String -> [(String,String,Result String)] -> String
 printStats "plain" = join "\n\n" . map (printSingleStat "plain")
+printStats "json" = printf "{%s}" . join "," . map (printSingleStat "json")
 
 execProgram :: Arguments -> IO String
 execProgram (Arguments format statlist True) = return $ "available algorithms:\n"++(join "\n" $ map fst3 algorithms)
