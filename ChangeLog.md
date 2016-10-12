@@ -1,5 +1,21 @@
 # Revision history for twitter-archive-parser
 
+## 0.4.0.0  -- 2016-10-12
+
+* Dependencies
+	* optparse-applicative
+	* mtl
+* Monad for error handling
+* Modules
+* Command line arguments
+	* select stats to print
+	* list available stats
+	* help menu
+	* select output format
+* Output format
+	* plain
+	* json
+
 ## 0.3.7.0  -- 2016-10-10
 
 * Broader `mean`
