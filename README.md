@@ -92,23 +92,23 @@ In case you want numbers instead of just the top 5 or something similar, at the
 moment most output things use `mostOccurring`, just change that to
 `sortedOccurrences` and you should get some nice numbers.
 
-As mentioned below, the output format might change soon, this will include a
-format that gives you the numbers right away.
+There will be an arguments to make the program print numbers by itself soon.
 
 # Output Format
 
-The output format is easily extensible and is currently focused on readability
-but could be rewritten to be e.g. JSON.
-This is currently planned for a later release which might also introduce
-command line arguments for tweaking the output.
+Using `-f` or `--format` you can set the output format to e.g. *plain* or
+*json* which then prints in the choosen format.
 
 # Version Information
 
 Currently the *ChangeLog* and versioning are based on the functions that are
 not directly stats but make up the API that is used by the statistics.
-This will change with the *1.0.0.0* release which will also introduce command
-line arguments.
+This will change with the *1.0.0.0* release.
 From then on the versioning will be about the statistics and not about the
 internal API, mainly because the API will remain frozen then, except for major
 releases.
+
+There might be a *2.0.0.0* release which transforms this entire program into a
+library which can be used easier by third party programs and a small command
+line program to call the library.
 
