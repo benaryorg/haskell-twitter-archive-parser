@@ -1,11 +1,14 @@
 module Main where
 
+import Arguments
 import Input
 import Tweet
 import TwitterMonad
 
 import Data.List
 import Data.Map (insertWith,unionWith,empty,toAscList,Map)
+import Data.String.Utils
+import Data.Tuple.Utils
 import Text.Printf
 import Text.Regex.PCRE ((=~))
 
@@ -88,43 +91,51 @@ statMostRepliedTo = take 5 . mostOccurring . filter (not . null) . map in_reply_
 statMostMentioned :: [Tweet] -> [String]
 statMostMentioned = take 5 . mostOccurring . concat . filter (not . null) . map mentions . filter (not . retweet)
 
--- A list of stats listed with their description and the function of the algorithm
-algorithms :: [(String,([Tweet] -> Result String))]
+-- A list of stats listed with their name, description and the function of the algorithm
+algorithms :: [(String,String,([Tweet] -> Result String))]
 algorithms =
 	[
-		("tweet count",Value . show . statNumberTweets),
-		("number of retweets",Value . show . statNumberRetweets),
-		("number of plain tweets (no mentions or retweets)",Value . show . statNumberPlainTweets),
-		("number of characters",Value . show . statNumberCharacters),
-		("number of links",Value . show . statNumberLinks),
-		("mean number of accounts mentioned",Value . printf "%.3f" . statMeanNumberMentions),
-		("mean character count",Value . show . statMeanNumberCharacters),
-		("mean number of links",Value . printf "%.3f" . statMeanNumberLinks),
-		("most used sources",List . statMostUsedSources),
-		("most used characters",List . map show . statMostUsedCharacters),
-		("most often replied to",List . statMostRepliedTo),
-		("most often mentioned",List . statMostMentioned)
+		("tweets","tweet count",Value . show . statNumberTweets),
+		("retweets","number of retweets",Value . show . statNumberRetweets),
+		("plaintweets","number of plain tweets (no mentions or retweets)",Value . show . statNumberPlainTweets),
+		("characters","number of characters",Value . show . statNumberCharacters),
+		("links","number of links",Value . show . statNumberLinks),
+		("meanmentions","mean number of accounts mentioned",Value . printf "%.3f" . statMeanNumberMentions),
+		("meancharacters","mean character count",Value . show . statMeanNumberCharacters),
+		("meanlinks","mean number of links",Value . printf "%.3f" . statMeanNumberLinks),
+		("mostsources","most used sources",List . statMostUsedSources),
+		("mostcharacters","most used characters",List . map show . statMostUsedCharacters),
+		("mostreplies","most often replied to",List . statMostRepliedTo),
+		("mostmentions","most often mentioned",List . statMostMentioned)
 	]
 
 -- Generates and prints stats
-statistics :: [Tweet] -> [(String,Result String)]
-statistics tweets = map (\(desc,foo) -> (desc,foo tweets)) algorithms
+statistics :: [String] -> [Tweet] -> [(String,String,Result String)]
+statistics statlist tweets = map (\(name,desc,foo) -> (name,desc,foo tweets)) (filter ((flip elem) statlist . fst3) algorithms)
 
 -- Prints a single stat taking care of Values and Lists
-printSingleStat :: (String,Result String) -> IO ()
-printSingleStat (desc,Value value) = putStrLn (desc++": "++value) >> putStrLn ""
-printSingleStat (desc,List list) = putStrLn (desc++":") >> mapM_ (putStrLn . ("- "++)) list >> putStrLn ""
+printSingleStat :: String -> (String,String,Result String) -> String
+printSingleStat "plain" (name,desc,Value value) = desc++": "++value
+printSingleStat "plain" (name,desc,List list) = desc++":"++concatMap ("\n- "++) list
 
 -- Prints all statistics
-printStats :: [(String,Result String)] -> IO ()
-printStats = mapM_ printSingleStat
+printStats :: String -> [(String,String,Result String)] -> String
+printStats "plain" = join "\n\n" . map (printSingleStat "plain")
+
+execProgram :: Arguments -> IO String
+execProgram (Arguments format statlist True) = return $ "available algorithms:\n"++(join "\n" $ map fst3 algorithms)
+execProgram (Arguments format [] printList) = execProgram $ Arguments format (map fst3 algorithms) printList
+execProgram (Arguments format statlist list) = do
+	text <- getContents
+	return $ case readArchive text of
+		Right dat -> printStats format $ statistics statlist dat
+		Left err -> case err of
+			InputError err -> "InputError: "++show err
 
 -- Parses the archive and passes the resulting list of Tweets to the stat function
 main :: IO ()
 main = do
-	text <- getContents
-	case readArchive text of
-		Right dat -> printStats $ statistics dat
-		Left err -> case err of
-			InputError err -> putStrLn $ "InputError: "++show err
+	argument <- arguments
+	output <- execProgram argument
+	putStrLn output
 
