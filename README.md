@@ -21,8 +21,11 @@ Currently prints (might be incomplete):
 - mean number of accounts mentioned
 - mean character count
 - mean number of links
+- mean number of words
+- mean word length
 - most used sources
 - most used characters
+- most used words
 - most often replied to
 - most often mentioned
 
