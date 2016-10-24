@@ -91,6 +91,9 @@ statMostUsedSources = take 5 . mostOccurring . map source
 statMostUsedCharacters :: [Tweet] -> [Char]
 statMostUsedCharacters = take 5 . map fst . sortBy compareOccurrencesDesc . toAscList . (foldl (unionWith (+)) empty) . map (occurrencesRaw . text) . filter (not . retweet)
 
+statMostUsedWords :: [Tweet] -> [String]
+statMostUsedWords = take 5 . map fst . sortBy compareOccurrencesDesc . toAscList . (foldl (unionWith (+)) empty) . map (occurrencesRaw . words . text) . filter (not . retweet)
+
 statMostRepliedTo :: [Tweet] -> [String]
 statMostRepliedTo = take 5 . mostOccurring . filter (not . null) . map in_reply_to_user_id . filter (not . retweet)
 
@@ -113,6 +116,7 @@ algorithms =
 		("meanwordlength","mean word length",Value . printf "%.3f" . statMeanWordLength),
 		("mostsources","most used sources",List . statMostUsedSources),
 		("mostcharacters","most used characters",List . map show . statMostUsedCharacters),
+		("mostwords","most used words",List . statMostUsedWords),
 		("mostreplies","most often replied to",List . statMostRepliedTo),
 		("mostmentions","most often mentioned",List . statMostMentioned)
 	]
