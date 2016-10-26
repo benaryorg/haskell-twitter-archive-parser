@@ -15,11 +15,9 @@ Currently prints (might be incomplete):
 
 - tweet count
 - number of retweets
-- number of plain tweets (no mentions or retweets)
-- number of characters
 - number of links
+- mean number of characters
 - mean number of accounts mentioned
-- mean character count
 - mean number of links
 - mean number of words
 - mean word length
