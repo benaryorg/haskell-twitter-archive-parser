@@ -14,6 +14,7 @@ import Text.Regex.PCRE ((=~))
 
 -- The result of an algorithm
 data (Show a) => Result a = Value a
+	| NumberStat (Integer,Double,Integer)
 	| List [a]
 
 -- Returns a list of "@username"s that were mentioned in the tweet
@@ -58,6 +59,9 @@ sortedOccurrences = (sortBy compareOccurrencesDesc) . occurrences
 -- Returns the occurrences sorted by descending count without the count
 mostOccurring :: Ord a => [a] -> [a]
 mostOccurring = (map fst) . sortedOccurrences
+
+numberStat :: (Integral a,Ord b,Fractional b) => [a] -> Result String
+numberStat list = let [a,b,c] = [minimum,fmean,maximum] `applyAll` map fromIntegral list in NumberStat (round a,b,round c)
 
 statNumberTweets :: [Tweet] -> Int
 statNumberTweets = length
@@ -133,8 +137,10 @@ statistics statlist tweets = map (\(name,desc,foo) -> (name,desc,foo tweets)) (f
 printSingleStat :: String -> (String,String,Result String) -> String
 printSingleStat "plain" (name,desc,Value value) = desc++": "++value
 printSingleStat "plain" (name,desc,List list) = desc++":"++concatMap ("\n- "++) list
+printSingleStat "plain" (name,desc,NumberStat (x,y,z)) = printf "%s:\n- min: %d\n- avg: %.3f\n- max: %d" desc x y z
 printSingleStat "json" (name,desc,Value value) = printf "\"%s\":%s" name (show value)
 printSingleStat "json" (name,desc,List list) = printf "\"%s\":[%s]" name $ join "," $ map show list
+printSingleStat "json" (name,desc,NumberStat (x,y,z)) = printf "\"%s\":{\"min\":%d,\"avg\":%f,\"max\":%d}" desc x y z
 
 -- Prints all statistics
 printStats :: String -> [(String,String,Result String)] -> String
