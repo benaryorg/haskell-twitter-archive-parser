@@ -27,6 +27,10 @@ mentions = concat . ((flip foo) pattern) . text
 retweet :: Tweet -> Bool
 retweet = not . null . retweeted_status_id
 
+-- Applies all functions to the given argument and returns the results
+applyAll :: [a -> b] -> a -> [b]
+applyAll foos x = map ($ x) foos
+
 -- Calculates the mean of a list of Integrals
 mean :: Integral a => [a] -> a
 mean list = (sum list) `div` fromIntegral (length list)
