@@ -1,4 +1,9 @@
-# Revision history for twitter-archive-parser
+ Revision history for twitter-archive-parser
+
+## 0.5.0.0  -- 2016-10-26
+
+* Internal datastructure changed
+	* NumberStat added
 
 ## 0.4.0.0  -- 2016-10-12
 
