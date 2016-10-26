@@ -72,26 +72,23 @@ statNumberRetweets = length . filter retweet
 statNumberPlainTweets :: [Tweet] -> Int
 statNumberPlainTweets = length . filter (null . mentions) . filter (not . retweet)
 
-statNumberCharacters :: [Tweet] -> Int
-statNumberCharacters = sum . map (length . text) . filter (not . retweet)
-
 statNumberLinks :: [Tweet] -> Int
 statNumberLinks = sum . map (length . expanded_urls) . filter (not . retweet)
 
-statMeanNumberMentions :: [Tweet] -> Double
-statMeanNumberMentions = fmean . map (fromIntegral . length . mentions) . filter (not . retweet)
+statMeanNumberCharacters :: [Tweet] -> [Int]
+statMeanNumberCharacters = map (length . text) . filter (not . retweet)
 
-statMeanNumberCharacters :: [Tweet] -> Int
-statMeanNumberCharacters = mean . map (length . text) . filter (not . retweet)
+statMeanNumberMentions :: [Tweet] -> [Int]
+statMeanNumberMentions = map (fromIntegral . length . mentions) . filter (not . retweet)
 
-statMeanNumberLinks :: [Tweet] -> Double
-statMeanNumberLinks = fmean . map (fromIntegral . length . expanded_urls) . filter (not . retweet)
+statMeanNumberLinks :: [Tweet] -> [Int]
+statMeanNumberLinks = map (fromIntegral . length . expanded_urls) . filter (not . retweet)
 
-statMeanNumberWords :: [Tweet] -> Double
-statMeanNumberWords = fmean . map (fromIntegral . length . words . text) . filter (not . retweet)
+statMeanNumberWords :: [Tweet] -> [Int]
+statMeanNumberWords = map (fromIntegral . length . words . text) . filter (not . retweet)
 
-statMeanWordLength :: [Tweet] -> Double
-statMeanWordLength = fmean . concat . map (map (fromIntegral . length) . words . text) . filter (not . retweet)
+statMeanWordLength :: [Tweet] -> [Int]
+statMeanWordLength = concat . map (map (fromIntegral . length) . words . text) . filter (not . retweet)
 
 statMostUsedSources :: [Tweet] -> [String]
 statMostUsedSources = take 5 . mostOccurring . map source
@@ -115,13 +112,12 @@ algorithms =
 		("tweets","tweet count",Value . show . statNumberTweets),
 		("retweets","number of retweets",Value . show . statNumberRetweets),
 		("plaintweets","number of plain tweets (no mentions or retweets)",Value . show . statNumberPlainTweets),
-		("characters","number of characters",Value . show . statNumberCharacters),
 		("links","number of links",Value . show . statNumberLinks),
-		("meanmentions","mean number of accounts mentioned",Value . printf "%.3f" . statMeanNumberMentions),
-		("meancharacters","mean character count",Value . show . statMeanNumberCharacters),
-		("meanlinks","mean number of links",Value . printf "%.3f" . statMeanNumberLinks),
-		("meanwords","mean number of words",Value . printf "%.3f" . statMeanNumberWords),
-		("meanwordlength","mean word length",Value . printf "%.3f" . statMeanWordLength),
+		("meancharacters","mean number of characters",numberStat . statMeanNumberCharacters),
+		("meanmentions","mean number of accounts mentioned",numberStat . statMeanNumberMentions),
+		("meanlinks","mean number of links",numberStat . statMeanNumberLinks),
+		("meanwords","mean number of words",numberStat . statMeanNumberWords),
+		("meanwordlength","mean word length",numberStat . statMeanWordLength),
 		("mostsources","most used sources",List . statMostUsedSources),
 		("mostcharacters","most used characters",List . map show . statMostUsedCharacters),
 		("mostwords","most used words",List . statMostUsedWords),
