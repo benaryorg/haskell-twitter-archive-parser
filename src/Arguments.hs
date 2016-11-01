@@ -3,7 +3,6 @@ module Arguments
 , arguments
 ) where
 
-import Data.String.Utils
 import Options.Applicative
 
 -- Command line arguments

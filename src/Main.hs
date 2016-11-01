@@ -42,7 +42,7 @@ fmean list = (sum list) / fromIntegral (length list)
 
 -- Uses a Map to determine how often each element occurs in the list, returns a Map
 occurrencesRaw :: Ord a => [a] -> Map a Int
-occurrencesRaw = foldl (\map e -> insertWith (+) e 1 map) empty
+occurrencesRaw = foldl (\m e -> insertWith (+) e 1 m) empty
 
 -- Uses a Map to determine how often each element occurs in the list
 occurrences :: Ord a => [a] -> [(a,Int)]
@@ -60,7 +60,7 @@ sortedOccurrences = (sortBy compareOccurrencesDesc) . occurrences
 mostOccurring :: Ord a => [a] -> [a]
 mostOccurring = (map fst) . sortedOccurrences
 
-numberStat :: (Integral a,Ord b,Fractional b) => [a] -> Result String
+numberStat :: Integral a => [a] -> Result String
 numberStat list = let [a,b,c] = [minimum,fmean,maximum] `applyAll` map fromIntegral list in NumberStat (round a,b,round c)
 
 statNumberTweets :: [Tweet] -> Int
@@ -131,27 +131,29 @@ statistics statlist tweets = map (\(name,desc,foo) -> (name,desc,foo tweets)) (f
 
 -- Prints a single stat taking care of Values and Lists
 printSingleStat :: String -> (String,String,Result String) -> String
-printSingleStat "plain" (name,desc,Value value) = desc++": "++value
-printSingleStat "plain" (name,desc,List list) = desc++":"++concatMap ("\n- "++) list
-printSingleStat "plain" (name,desc,NumberStat (x,y,z)) = printf "%s:\n- min: %d\n- avg: %.3f\n- max: %d" desc x y z
-printSingleStat "json" (name,desc,Value value) = printf "\"%s\":%s" name (show value)
-printSingleStat "json" (name,desc,List list) = printf "\"%s\":[%s]" name $ join "," $ map show list
-printSingleStat "json" (name,desc,NumberStat (x,y,z)) = printf "\"%s\":{\"min\":%d,\"avg\":%f,\"max\":%d}" name x y z
+printSingleStat "plain" (_name,desc,Value value) = desc++": "++value
+printSingleStat "plain" (_name,desc,List list) = desc++":"++concatMap ("\n- "++) list
+printSingleStat "plain" (_name,desc,NumberStat (x,y,z)) = printf "%s:\n- min: %d\n- avg: %.3f\n- max: %d" desc x y z
+printSingleStat "json" (name,_desc,Value value) = printf "\"%s\":%s" name (show value)
+printSingleStat "json" (name,_desc,List list) = printf "\"%s\":[%s]" name $ join "," $ map show list
+printSingleStat "json" (name,_desc,NumberStat (x,y,z)) = printf "\"%s\":{\"min\":%d,\"avg\":%f,\"max\":%d}" name x y z
+printSingleStat _ _ = error "printSingleStat: invalid input"
 
 -- Prints all statistics
 printStats :: String -> [(String,String,Result String)] -> String
 printStats "plain" = join "\n\n" . map (printSingleStat "plain")
 printStats "json" = printf "{%s}" . join "," . map (printSingleStat "json")
+printStats _ = error "printStats: format not supported"
 
 execProgram :: Arguments -> IO String
-execProgram (Arguments format statlist True) = return $ "available algorithms:\n"++(join "\n" $ map fst3 algorithms)
+execProgram (Arguments _format _statlist True) = return $ "available algorithms:\n"++(join "\n" $ map fst3 algorithms)
 execProgram (Arguments format [] printList) = execProgram $ Arguments format (map fst3 algorithms) printList
-execProgram (Arguments format statlist list) = do
-	text <- getContents
-	return $ case readArchive text of
+execProgram (Arguments format statlist _list) = do
+	input <- getContents
+	return $ case readArchive input of
 		Right dat -> printStats format $ statistics statlist dat
 		Left err -> case err of
-			InputError err -> "InputError: "++show err
+			InputError ierr -> "InputError: "++show ierr
 
 -- Parses the archive and passes the resulting list of Tweets to the stat function
 main :: IO ()

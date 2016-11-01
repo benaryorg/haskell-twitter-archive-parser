@@ -12,7 +12,7 @@ import Text.ParserCombinators.Parsec
 -- This skips the first line containing the headers to not interfere with datatypes
 headers :: Parser ()
 headers = do
-	anyChar `manyTill` lookAhead newline
+	_ <- anyChar `manyTill` lookAhead newline
 	return ()
 
 -- Parses a single quoted character, which is either a regular character or "" which is being
@@ -47,12 +47,12 @@ tweet = do
 parseArchive :: Parser [Tweet]
 parseArchive = do
 	-- ignore headers
-	headers >> newline
+	_ <- headers >> newline
 	tweet `sepEndBy` ((newline >> return ()) <|> eof)
 
 -- Converts a read CSV file to a list of Tweets, can fail
 readArchive :: String -> TwitterMonad [Tweet]
-readArchive text = case parse parseArchive "twitter archive" text of
+readArchive input = case parse parseArchive "twitter archive" input of
 		Left err -> throwError $ InputError err
 		Right tweets -> return tweets
 
