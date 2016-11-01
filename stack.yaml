@@ -45,7 +45,7 @@ extra-deps: []
 flags: {}
 
 ghc-options:
-    "twitter-archive-parser": -Wall -Wextra -Wno-tabs -Wno-type-defaults
+    "twitter-archive-parser": -Wall -Wextra -Wno-tabs -Wno-type-defaults -Werror
 
 # Extra package databases containing global packages
 extra-package-dbs: []
