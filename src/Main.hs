@@ -136,7 +136,7 @@ printSingleStat "plain" (name,desc,List list) = desc++":"++concatMap ("\n- "++) 
 printSingleStat "plain" (name,desc,NumberStat (x,y,z)) = printf "%s:\n- min: %d\n- avg: %.3f\n- max: %d" desc x y z
 printSingleStat "json" (name,desc,Value value) = printf "\"%s\":%s" name (show value)
 printSingleStat "json" (name,desc,List list) = printf "\"%s\":[%s]" name $ join "," $ map show list
-printSingleStat "json" (name,desc,NumberStat (x,y,z)) = printf "\"%s\":{\"min\":%d,\"avg\":%f,\"max\":%d}" desc x y z
+printSingleStat "json" (name,desc,NumberStat (x,y,z)) = printf "\"%s\":{\"min\":%d,\"avg\":%f,\"max\":%d}" name x y z
 
 -- Prints all statistics
 printStats :: String -> [(String,String,Result String)] -> String
